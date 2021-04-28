@@ -482,7 +482,6 @@ def _div(raw,inputs, inputs2):
     log.add_blobs([x],name='div_blob')
     return x
 
-
 # ----- for Variable operations --------
 
 def _view(input, *args):
@@ -499,6 +498,9 @@ def _view(input, *args):
     layer.param.reshape_param.shape.CopyFrom(caffe_net.pb.BlobShape(dim=dims))
     log.cnet.add_layer(layer)
     return x
+
+def _flatten(input, start_dim=0, end_dim=-1):
+    return _view(input, start_dim, end_dim)
 
 def _mean(input, *args,**kwargs):
     x=raw_mean(input, *args,**kwargs)
@@ -721,6 +723,8 @@ torch.div=Rp(torch.div,_div)
 
 # TODO: other types of the view function
 try:
+    raw_flatten=torch.flatten
+    torch.flatten=_flatten
     raw_view=Variable.view
     Variable.view=_view
     raw_mean=Variable.mean
