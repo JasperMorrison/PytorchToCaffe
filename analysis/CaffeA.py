@@ -17,7 +17,13 @@ def profiling(net, input=None):
         if len(layer.top) == 1 and len(layer.bottom) == 1:
             if layer.type == 'Convolution':
                 param = layer.convolution_param
-                out = Conv(blob_dict[layer.bottom[0]], param.kernel_size, param.num_output, param.stride,
+                if layer.bottom[0] == 'blob1':
+                    blob_dict[layer.bottom[0]] = input
+                if type(param.kernel_size) == int:
+                    kernel_size = param.kernel_size
+                else:
+                    kernel_size = param.kernel_size[0]
+                out = Conv(blob_dict[layer.bottom[0]], kernel_size, param.num_output, param.stride,
                              param.pad, None, layer.name, group_size=param.group)
             if layer.type == 'InnerProduct':
                 param=layer.inner_product_param
