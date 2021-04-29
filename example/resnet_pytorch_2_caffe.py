@@ -2,7 +2,8 @@ import sys
 sys.path.insert(0,'.')
 import torch
 from torch.autograd import Variable
-from torchvision.models import resnet
+#from torchvision.models import resnet
+import model.pretrained_resnet as models # ceil_mode = True
 import pytorch_to_caffe
 
 if __name__=='__main__':
