@@ -104,6 +104,10 @@ Example: please see file `example/alexnet_pytorch_to_caffe.py`. Just Run `python
 Attention:
 the main difference from convert model is the BN layer,you should pay more attention to the BN parameters like  momentum=0.1, eps=1e-5.
 
+## For YOLOv5 to caffe
+
+See [YOLOv5.md](./YOLOv5.md)
+
 # Deploy verify(Very Important)
 After Converter,we should use verify_deploy.py to verify the output of pytorch model and the convertted caffe model.
 If you want to verify the outputs of caffe and pytorch,you should make caffe and pytorch install in the same environment,anaconda is recommended.

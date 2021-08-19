@@ -220,8 +220,8 @@ def _max(raw,*args):
         log.cnet.add_layer(layer)
     return x
 
-def _cat(raw,inputs, dimension=0):
-    x=raw(inputs, dimension)
+def _cat(raw,inputs, dim=0):
+    x=raw(inputs, dim)
     bottom_blobs=[]
     for input in inputs:
         bottom_blobs.append(log.blobs(input))
@@ -229,7 +229,7 @@ def _cat(raw,inputs, dimension=0):
     top_blobs=log.add_blobs([x],name='cat_blob')
     layer=caffe_net.Layer_param(name=layer_name,type='Concat',
                                 bottom=bottom_blobs,top=top_blobs)
-    layer.param.concat_param.axis =dimension
+    layer.param.concat_param.axis =dim
     log.cnet.add_layer(layer)
     return x
 
@@ -409,6 +409,8 @@ def _interpolate(raw, input,size=None, scale_factor=None, mode='nearest', align_
     layer = caffe_net.Layer_param(name=layer_name, type='Upsample',
                                   bottom=[log.blobs(input)], top=top_blobs)
 
+    if not isinstance(scale_factor, int) and not isinstance(scale_factor, list):
+        scale_factor = int(scale_factor)
     layer.upsample_param(size =(input.size(2),input.size(3)), scale_factor= scale_factor)
     log.cnet.add_layer(layer)
     return x
@@ -687,8 +689,9 @@ class Rp(object):
                 layer=stack[0].f_locals['self']
                 if layer in layer_names:
                     log.pytorch_layer_name=layer_names[layer]
-                    print(layer_names[layer])
+                    print("Processing Layer: ",layer_names[layer])
                     break
+        print("raw:",self.raw.__name__, ",replace:",self.obj.__name__)
         out=self.obj(self.raw,*args,**kwargs)
         # if isinstance(out,Variable):
         #     out=[out]
